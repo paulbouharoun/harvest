@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { trackLink } from "@/lib/analytics";
 import { computeStats } from "@/lib/stats";
 import { buildTerrain, mulberry } from "@/lib/terrain";
 import type { DayCount } from "@/lib/types";
@@ -87,7 +88,12 @@ export default function Hero() {
       </div>
       <footer className={s.foot}>
         <span>Public data only · no sign-in</span>
-        <a href="https://paulbouharoun.com" target="_blank" rel="noreferrer">
+        <a
+          href="https://paulbouharoun.com"
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => trackLink("Made by Paul Bouharoun", "https://paulbouharoun.com")}
+        >
           Made by Paul Bouharoun
         </a>
       </footer>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { track, trackLink } from "@/lib/analytics";
 import { deriveView } from "@/lib/harvest-view";
 import { fmtDate, fmtNum, hourProfile, type HourProfile } from "@/lib/stats";
 import type { Paddy } from "@/lib/terrain";
@@ -137,7 +138,13 @@ export default function Experience({ harvest, years }: { harvest: Harvest; years
         body: (
           <>
             <p className={s.title}>
-              <a href={`https://github.com/${r.name}`} target="_blank" rel="noreferrer">
+              {/* The repo name stays out of telemetry: fixed label, bare host. */}
+              <a
+                href={`https://github.com/${r.name}`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackLink("Most tended repo", "https://github.com")}
+              >
                 {r.name.split("/")[1]}
               </a>
             </p>
@@ -191,9 +198,15 @@ export default function Experience({ harvest, years }: { harvest: Harvest; years
     return () => window.removeEventListener("keydown", onKey);
   }, [go]);
 
+  // The field loaded: the one event that means the visitor used the app. Year only, never the login.
+  useEffect(() => {
+    track("field_viewed", { year: harvest.year, is_current_year: harvest.year === years[0] });
+  }, [harvest.login, harvest.year]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const copy = async (what: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      track("card_shared", { method: what === "readme" ? "readme_snippet" : "copy_link", year: harvest.year });
       setCopied(what);
       setTimeout(() => setCopied(null), 1600);
     } catch {}
@@ -247,13 +260,19 @@ export default function Experience({ harvest, years }: { harvest: Harvest; years
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={cardUrl} alt={`Harvest card for ${who}`} width={1200} height={630} />
             <div className={s.actions}>
-              <a className={s.primary} href={cardUrl} download={`harvest-${harvest.login}-${harvest.year}.png`}>
+              <a
+                className={s.primary}
+                href={cardUrl}
+                download={`harvest-${harvest.login}-${harvest.year}.png`}
+                onClick={() => track("card_downloaded", { year: harvest.year })}
+              >
                 Download card
               </a>
               <a
                 href={`https://x.com/intent/post?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(pageUrl)}`}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => track("card_shared", { method: "x_post", year: harvest.year })}
               >
                 Post
               </a>
