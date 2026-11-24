@@ -227,9 +227,9 @@ async function fetchHarvest(login: string, year: number): Promise<Harvest> {
   };
 }
 
-/** Shared across requests for an hour (errors are not cached). */
+/** Shared across all server instances for an hour (errors are not cached). */
 async function cachedHarvest(login: string, year: number): Promise<Harvest> {
-  "use cache";
+  "use cache: remote";
   cacheLife("hours");
   return fetchHarvest(login, year);
 }
