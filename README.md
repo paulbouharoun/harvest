@@ -19,6 +19,7 @@ Type a username, watch the flyover, walk through a few plates (longest growing s
 cp .env.example .env.local   # add a GitHub token
 npm install
 npm run dev
+npm test           # unit tests for the stats and the terrain geometry
 ```
 
 Then open http://localhost:3000 and try `/mattpocock`.
