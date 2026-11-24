@@ -1,0 +1,16 @@
+:root {
+  --paper: #ebe5d6;
+  --ink: #29261f;
+  --muted: #7a715f;
+  --rule: #cbbf9f;
+  --green: #3f9b2c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "tnum";
+}
+a { color: inherit; }
+button, input { font: inherit; color: inherit; }
