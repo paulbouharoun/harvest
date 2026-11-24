@@ -49,7 +49,7 @@ export async function GET(req: Request, ctx: RouteContext<"/card/[user]">) {
             <div style={{ display: "flex", flexDirection: "column", marginTop: "auto", gap: 16 }}>
               <div style={{ display: "flex", borderTop: `1px solid #cbbf9f`, paddingTop: 16, justifyContent: "space-between" }}>
                 {caption("Longest streak")}
-                <div style={{ fontSize: 18 }}>{season.length ? `${season.length} days` : "—"}</div>
+                <div style={{ fontSize: 18 }}>{season.length ? `${season.length} ${season.length === 1 ? "day" : "days"}` : "—"}</div>
               </div>
               <div style={{ display: "flex", borderTop: `1px solid #cbbf9f`, paddingTop: 16, justifyContent: "space-between" }}>
                 {caption("Busiest day")}
